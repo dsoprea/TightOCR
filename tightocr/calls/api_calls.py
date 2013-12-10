@@ -52,7 +52,7 @@ c_tess_set_image_details.argtypes = [TessApiP, POINTER(c_ubyte), c_int, c_int,
 c_tess_set_image_details.restype = simple_nonzero_result_checker
 
 c_tess_set_image_pix = libctess.tess_set_image_pix
-c_tess_set_image_pix.argtypes = [TessApiP, TessPixaP]
+c_tess_set_image_pix.argtypes = [TessApiP, TessPixP]
 c_tess_set_image_pix.restype = simple_nonzero_result_checker
 
 c_tess_set_source_resolution = libctess.tess_set_source_resolution
@@ -153,7 +153,7 @@ c_tess_get_unlv_text.restype = c_char_p
 
 c_tess_mean_text_conf = libctess.tess_mean_text_conf
 c_tess_mean_text_conf.argtypes = [TessApiP]
-c_tess_mean_text_conf.restype = simple_nonzero_result_checker
+c_tess_mean_text_conf.restype = c_int
 
 c_tess_all_word_confidences = libctess.tess_all_word_confidences
 c_tess_all_word_confidences.argtypes = [TessApiP]
