@@ -1,4 +1,4 @@
-from ctypes import Structure, POINTER, c_void_p
+from ctypes import Structure, POINTER, c_void_p, c_int
 
 class TessApi(Structure):
     _fields_ = [('opaque', c_void_p)]
@@ -58,4 +58,11 @@ class TessBlob(Structure):
     _fields_ = []
 
 TessBlobP = POINTER(TessBlob)
+
+class TessMrIterator(Structure):
+# TODO: Finish.
+    _fields_ = [('iterator', c_void_p), 
+                ('type', c_int)]
+
+TessMrIteratorP = POINTER(TessMrIterator)
 

@@ -4,9 +4,10 @@ from ctypes import POINTER, c_int, c_char_p, c_void_p, c_ubyte, c_float, \
 from tightocr.library_ctess import libctess
 from tightocr.types import TessApiP, TessPixaP, TessPixP, TessBoxaP, \
                            TessPageIteratorP, TessMrIteratorP, TessStringP, \
-                           TessBlockListP, TessRowP, TessBlobP
+                           TessBlockListP, TessRowP, TessBlobP, TessMrIteratorP
 
-from tightocr import simple_nonzero_result_checker
+from tightocr import simple_nonzero_result_checker, \
+                     simple_more_than_zero_result_checker
 
 c_tess_create = libctess.tess_create
 c_tess_create.argtypes = [c_char_p, c_char_p, TessApiP]
@@ -37,19 +38,19 @@ c_tess_get_page_seg_mode = libctess.tess_get_page_seg_mode
 c_tess_get_page_seg_mode.argtypes = [TessApiP]
 c_tess_get_page_seg_mode.restype = simple_nonzero_result_checker
 
-c_tess_tesseract_rect = libctess.tess_tesseract_rect
-c_tess_tesseract_rect.argtypes = [TessApiP, POINTER(c_ubyte), c_int, c_int, 
-                                  c_int, c_int, c_int, c_int]
-c_tess_tesseract_rect.restype = c_char_p
+#c_tess_tesseract_rect = libctess.tess_tesseract_rect
+#c_tess_tesseract_rect.argtypes = [TessApiP, POINTER(c_ubyte), c_int, c_int, 
+#                                  c_int, c_int, c_int, c_int]
+#c_tess_tesseract_rect.restype = c_char_p
 
 c_tess_clear_adaptive_classifier = libctess.tess_clear_adaptive_classifier
 c_tess_clear_adaptive_classifier.argtypes = [TessApiP]
 c_tess_clear_adaptive_classifier.restype = simple_nonzero_result_checker
 
-c_tess_set_image_details = libctess.tess_set_image_details
-c_tess_set_image_details.argtypes = [TessApiP, POINTER(c_ubyte), c_int, c_int, 
-                                     c_int, c_int]
-c_tess_set_image_details.restype = simple_nonzero_result_checker
+#c_tess_set_image_details = libctess.tess_set_image_details
+#c_tess_set_image_details.argtypes = [TessApiP, POINTER(c_ubyte), c_int, c_int, 
+#                                     c_int, c_int]
+#c_tess_set_image_details.restype = simple_nonzero_result_checker
 
 c_tess_set_image_pix = libctess.tess_set_image_pix
 c_tess_set_image_pix.argtypes = [TessApiP, TessPixP]
@@ -137,7 +138,7 @@ c_tess_get_iterator.restype = simple_nonzero_result_checker
 
 c_tess_get_utf8_text = libctess.tess_get_utf8_text
 c_tess_get_utf8_text.argtypes = [TessApiP]
-c_tess_get_utf8_text.restype = c_char_p
+c_tess_get_utf8_text.restype = c_void_p
 
 c_tess_get_hocr_text = libctess.tess_get_hocr_text
 c_tess_get_hocr_text.argtypes = [TessApiP, c_int]
@@ -226,4 +227,22 @@ c_tess_delete_block_list.restype = simple_nonzero_result_checker
 c_tess_delete_string = libctess.tess_delete_string
 c_tess_delete_string.argtypes = [c_char_p]
 c_tess_delete_string.restype = simple_nonzero_result_checker
+
+# Handler for MR iterator.
+
+c_tess_mr_it_next = libctess.tess_mr_it_next
+c_tess_mr_it_next.argtypes = [TessMrIteratorP, c_int]
+c_tess_mr_it_next.restype = simple_more_than_zero_result_checker
+
+c_tess_mr_it_get_utf8_text = libctess.tess_mr_it_get_utf8_text
+c_tess_mr_it_get_utf8_text.argtypes = [TessMrIteratorP, c_int]
+c_tess_mr_it_get_utf8_text.restype = c_void_p
+
+c_tess_mr_it_delete = libctess.tess_mr_it_delete
+c_tess_mr_it_delete.argtypes = [TessMrIteratorP]
+c_tess_mr_it_delete.restype = simple_nonzero_result_checker
+
+c_tess_mr_it_empty = libctess.tess_mr_it_empty
+c_tess_mr_it_empty.argtypes = [TessMrIteratorP, c_int]
+c_tess_mr_it_empty.restype = simple_more_than_zero_result_checker
 

@@ -1,25 +1,28 @@
 from ctypes import byref, c_bool, c_int, byref, POINTER
 
-from tightocr import types
-#from tightocr.types import TessApi, TessPageIterator, TessString, \
-#                           TessMrIterator
+from tightocr import types, simple_ptr_result_checker, \
+                     simple_boolean_error_checker
+
+from tightocr.types import TessMrIterator
 from tightocr.calls.api_calls import *
-from tightocr import simple_ptr_result_checker, simple_boolean_error_checker
-
-#from tightocr.adapters.lept_adapter import pix_read
 
 
-class _ResourceWrapper(object):
-    def __init__(self, data, close_cb):
-        self.__data = data
-        self.__close_cb = close_cb
+class _TextWrapper(object):
+    def __init__(self, text_void_ptr):
+        self.__text_ptr = c_char_p(text_void_ptr)
 
     def __del__(self):
-        close_cb(self.__data)
+        TessApi.delete_string(self.__text_ptr)
 
-    @property
-    def data(self):
-        return self.__data
+    def __str__(self):
+        return self.__text_ptr.value
+
+def _tess_mr_it_get_utf8_text(mr_iterator_p, level):
+    text = c_tess_mr_it_get_utf8_text(mr_iterator_p, level)
+    if text is None:
+        raise ValueError("Could not retrieve text from MR iterator.")
+
+    return text
 
 
 class TessApi(object):
@@ -72,6 +75,23 @@ class TessApi(object):
     @classmethod
     def delete_string(cls, text):
         c_tess_delete_string(text)
+
+    def iterate(self, level):
+        mr_iterator = TessMrIterator()
+        c_tess_get_iterator(byref(self.__api), byref(mr_iterator))
+
+        try:
+            while 1:
+                result = c_tess_mr_it_empty(byref(mr_iterator), level)
+                if result == 0:
+                    text_ptr = _tess_mr_it_get_utf8_text(byref(mr_iterator), level)
+                    yield _TextWrapper(text_ptr)
+
+                result = c_tess_mr_it_next(byref(mr_iterator), level)
+                if result == 0:
+                    break
+        finally:
+            c_tess_mr_it_delete(byref(mr_iterator))
 
     def init_lang_mod(self, data_path, language):
         c_tess_init_lang_mod(byref(self.__api), data_path, language)
@@ -258,7 +278,7 @@ class TessApi(object):
     def get_utf8_text(self):
         str_ = c_tess_get_utf8_text(byref(self.__api))
         simple_ptr_result_checker(str_)
-        return str_
+        return _TextWrapper(str_)
 
     def get_hocr_text(self, page_number):
         str_ = c_tess_get_hocr_text(byref(self.__api), page_number)
