@@ -12,7 +12,7 @@ def main():
         raise Exception("Too much error.")
 
     for block in t.iterate(RIL_PARA):
-        print block
+        print(block)
 
 #    direction = t.get_text_direction()
 #    print(t.get_hocr_text(1))
