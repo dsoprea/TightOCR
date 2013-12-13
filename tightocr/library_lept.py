@@ -1,5 +1,5 @@
 from ctypes import cdll
 
-_LEPT_FILEPATH = "libtesseract.so"
+_LEPT_FILEPATH = "liblept.so"
 liblept = cdll.LoadLibrary(_LEPT_FILEPATH)
 
