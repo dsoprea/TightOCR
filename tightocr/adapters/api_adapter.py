@@ -12,7 +12,7 @@ class _TextWrapper(object):
         self.__text_ptr = c_char_p(text_void_ptr)
 
     def __del__(self):
-        TessApi.delete_string(self.__text_ptr)
+        c_tess_delete_string(self.__text_ptr)
 
     def __str__(self):
         return self.__text_ptr.value
@@ -72,10 +72,6 @@ class TessApi(object):
     def delete_block_list(cls, blocks):
         c_tess_delete_block_list(byref(blocks))
 
-    @classmethod
-    def delete_string(cls, text):
-        c_tess_delete_string(text)
-
     def iterate(self, level):
         mr_iterator = TessMrIterator()
         c_tess_get_iterator(byref(self.__api), byref(mr_iterator))
@@ -109,7 +105,7 @@ class TessApi(object):
         c_tess_set_image_pix(byref(self.__api), pix)
 
     def set_source_resolution(self, ppi):
-        c_tess_set_source_resolution(byref(self.__api), pp)
+        c_tess_set_source_resolution(byref(self.__api), ppi)
 
     def set_rectangle(self, left, top, width, height):
         c_tess_set_rectangle(byref(self.__api), left, top, width, height)
@@ -295,7 +291,7 @@ class TessApi(object):
         simple_ptr_result_checker(str_)
         return str_
 
-    def mean_text_conf(self):
+    def mean_text_confidence(self):
         return c_tess_mean_text_conf(byref(self.__api))
 
     def all_word_confidences(self):
