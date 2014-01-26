@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: tightocr
-Version: 0.4.1
+Version: 0.4.2
 Summary: Thin and pleasant wrapper for Tesseract OCR.
 Home-page: https://github.com/dsoprea/TightOCR
 Author: Dustin Oprea

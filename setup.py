@@ -5,7 +5,7 @@ from sys import exit
 from setuptools import setup, find_packages
 from setuptools.command.install import install
 
-version = '0.4.1'
+version = '0.4.2'
 
 def pre_install():
     print("Checking for libctesseract.")
