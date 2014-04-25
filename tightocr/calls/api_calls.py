@@ -246,3 +246,6 @@ c_tess_mr_it_empty = libctess.tess_mr_it_empty
 c_tess_mr_it_empty.argtypes = [TessMrIteratorP, c_int]
 c_tess_mr_it_empty.restype = simple_more_than_zero_result_checker
 
+c_tess_set_variable = libctess.tess_set_variable
+c_tess_set_variable.argtypes = [TessApiP, c_char_p, c_char_p]
+c_tess_set_variable.restype = simple_nonzero_result_checker

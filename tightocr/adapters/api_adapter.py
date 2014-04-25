@@ -358,3 +358,5 @@ class TessApi(object):
         c_tess_find_lines_create_block_list(byref(self.__api), byref(result))
         return result
 
+    def set_variable(self, name, value):
+        c_tess_set_variable(byref(self.__api), c_char_p(name), c_char_p(value))
